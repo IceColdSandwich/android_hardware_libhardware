@@ -220,6 +220,15 @@ static inline uint32_t audio_stream_frame_size(struct audio_stream *s)
     int chan_samp_sz;
 
     switch (s->get_format(s)) {
+    case AUDIO_FORMAT_AMR_NB:
+        chan_samp_sz = 32;
+        break;
+    case AUDIO_FORMAT_EVRC:
+        chan_samp_sz = 23;
+        break;
+    case AUDIO_FORMAT_QCELP:
+        chan_samp_sz = 35;
+        break;
     case AUDIO_FORMAT_PCM_16_BIT:
         chan_samp_sz = sizeof(int16_t);
         break;
