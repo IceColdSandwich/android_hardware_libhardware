@@ -218,6 +218,7 @@ typedef struct audio_stream_in audio_stream_in_t;
 static inline uint32_t audio_stream_frame_size(struct audio_stream *s)
 {
     int chan_samp_sz;
+    uint32_t chan_mask = s->get_channels(s);
 
     switch (s->get_format(s)) {
     case AUDIO_FORMAT_AMR_NB:
@@ -238,7 +239,12 @@ static inline uint32_t audio_stream_frame_size(struct audio_stream *s)
         break;
     }
 
-    return popcount(s->get_channels(s)) * chan_samp_sz;
+    if (audio_is_input_channel(chan_mask)) {
+        chan_mask &= (AUDIO_CHANNEL_IN_STEREO | \
+                      AUDIO_CHANNEL_IN_MONO );
+    }
+
+    return popcount(chan_mask) * chan_samp_sz;
 }
 
 
